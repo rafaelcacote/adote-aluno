@@ -1,0 +1,25 @@
+{
+    "name": "Adote um Estudante",
+    "short_name": "Adote Aluno",
+    "description": "Ajude estudantes com mensalidades escolares. PIX direto para a instituição.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0fdfa",
+    "theme_color": "#0d9488",
+    "orientation": "portrait-primary",
+    "lang": "pt-BR",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
