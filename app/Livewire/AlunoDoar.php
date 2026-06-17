@@ -12,6 +12,8 @@ class AlunoDoar extends Component
 {
     public Aluno $aluno;
 
+    public bool $modalMensalidadesAberto = false;
+
     public function mount(Aluno $aluno): void
     {
         abort_unless($aluno->ativo, 404);
@@ -22,6 +24,16 @@ class AlunoDoar extends Component
                 ->where('ano', $aluno->ano_letivo)
                 ->orderBy('mes'),
         ]);
+    }
+
+    public function abrirMensalidades(): void
+    {
+        $this->modalMensalidadesAberto = true;
+    }
+
+    public function fecharMensalidades(): void
+    {
+        $this->modalMensalidadesAberto = false;
     }
 
     public function render()

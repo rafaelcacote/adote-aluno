@@ -46,12 +46,7 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-white border-t border-brand-100 py-6">
-                <div class="max-w-lg mx-auto px-4 text-center text-sm text-gray-500">
-                    <p>PIX somente da instituição onde o aluno estuda.</p>
-                    <p class="mt-1">Não trabalhamos com PIX pessoal.</p>
-                </div>
-            </footer>
+            <x-layouts.public-footer />
         </div>
         @livewireScripts
     </body>

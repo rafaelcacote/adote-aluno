@@ -25,6 +25,10 @@
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md border border-brand-100 overflow-hidden sm:rounded-xl">
                 {{ $slot }}
             </div>
+
+            <div class="w-full sm:max-w-md mt-8">
+                <x-layouts.public-footer />
+            </div>
         </div>
     </body>
 </html>
