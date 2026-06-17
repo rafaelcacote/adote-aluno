@@ -198,7 +198,59 @@ No hPanel → **Backups** → ative backup automático do site e do MySQL.
 
 1. Na máquina local: altere o código → `./scripts/prepare-deploy.sh`
 2. Envie arquivos alterados via FTP/Git
-3. No servidor: `php artisan migrate --force && php artisan config:cache && php artisan view:cache`
+3. No servidor (SSH ou Terminal do hPanel):
+
+```bash
+cd /home/SEU_USUARIO/adote-aluno
+chmod +x deploy/post-deploy.sh
+./deploy/post-deploy.sh
+```
+
+O script limpa caches antigos antes de recriar — essencial para ver alterações em páginas Livewire.
+
+### Página não atualiza após deploy
+
+1. **Confirme que os arquivos chegaram no servidor** (SSH):
+
+```bash
+cd /home/SEU_USUARIO/adote-aluno
+grep -l "Convidar novo aluno" resources/views/livewire/admin/alunos-index.blade.php
+ls -la app/Livewire/Admin/AlunosIndex.php
+```
+
+Se não encontrar, o `git pull` ou upload FTP não atualizou a pasta certa.
+
+2. **Limpe todos os caches** (rode na pasta do Laravel, não no `public_html`):
+
+```bash
+php artisan optimize:clear
+php artisan view:clear
+php artisan config:clear
+php artisan route:clear
+php artisan migrate --force
+php artisan config:cache
+php artisan view:cache
+```
+
+3. **Se usa Git no servidor**, confira branch e último commit:
+
+```bash
+git status
+git log -1 --oneline
+git pull origin main
+```
+
+4. **Se usa método B** (`public_html` separado): atualize a pasta `adote-aluno/` (código Laravel). Só enviar `public_html` não atualiza views nem Livewire.
+
+5. **PWA / navegador**: o service worker pode cachear páginas. No Chrome: DevTools → Application → Service Workers → Unregister, ou abra em aba anônima com Ctrl+Shift+R.
+
+6. **Migration dos convites** (necessária para o botão funcionar):
+
+```bash
+php artisan migrate:status | grep convites
+```
+
+Deve aparecer `convites_aluno` como migrada. Se não, rode `php artisan migrate --force`.
 
 ---
 

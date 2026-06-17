@@ -11,6 +11,12 @@ php artisan storage:link --force 2>/dev/null || php artisan storage:link
 echo "→ Migrations..."
 php artisan migrate --force
 
+echo "→ Limpando caches antigos..."
+php artisan optimize:clear 2>/dev/null || php artisan cache:clear
+php artisan view:clear
+php artisan config:clear
+php artisan route:clear 2>/dev/null || true
+
 echo "→ Otimização..."
 php artisan config:cache
 php artisan view:cache
