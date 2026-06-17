@@ -1,7 +1,5 @@
 <div class="max-w-xl">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">
-        {{ $aluno ? 'Editar aluno' : 'Novo aluno' }}
-    </h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Editar aluno</h1>
 
     <form wire:submit="salvar" class="bg-white rounded-xl border border-brand-100 p-6 space-y-4">
         <div>

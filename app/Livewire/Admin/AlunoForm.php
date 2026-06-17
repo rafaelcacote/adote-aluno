@@ -81,10 +81,6 @@ class AlunoForm extends Component
             $this->aluno->update($dados);
             session()->flash('success', 'Aluno atualizado.');
             $this->redirect(route('admin.alunos.show', $this->aluno), navigate: true);
-        } else {
-            $aluno = Aluno::query()->create($dados);
-            session()->flash('success', 'Aluno cadastrado com 12 mensalidades geradas.');
-            $this->redirect(route('admin.alunos.show', $aluno), navigate: true);
         }
     }
 
