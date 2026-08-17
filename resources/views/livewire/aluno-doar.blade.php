@@ -3,7 +3,7 @@
         ← Voltar
     </a>
 
-    <div class="bg-white rounded-xl border border-brand-100 p-5 shadow-sm mb-6">
+    <div class="bg-white rounded-xl border border-brand-100 p-5 shadow-sm mb-4">
         <div class="flex items-center gap-4">
             @if ($aluno->foto_url)
                 <img src="{{ $aluno->foto_url }}" alt="" width="56" height="56" loading="lazy" decoding="async" class="w-14 h-14 rounded-full object-cover">
@@ -18,17 +18,53 @@
                 <p class="text-sm text-gray-500 mt-0.5">{{ $aluno->serie_ou_curso }}</p>
             </div>
         </div>
+    </div>
 
-        <button
-            type="button"
-            wire:click="abrirMensalidades"
-            class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-brand-200 bg-brand-50 text-brand-800 text-sm font-medium hover:bg-brand-100 transition"
+    <div class="relative overflow-hidden rounded-2xl border border-amber-300 bg-gradient-to-b from-amber-50 to-orange-50 p-5 sm:p-6 mb-6">
+        <div class="absolute inset-x-0 top-0 h-1.5 bg-amber-400"></div>
+
+        <div class="flex items-start gap-3">
+            <span class="flex-shrink-0 flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-amber-950 shadow-sm">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                </svg>
+            </span>
+            <div class="min-w-0">
+                <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-amber-800">Atenção — leia com cuidado</p>
+                <p class="mt-1 text-lg sm:text-xl font-bold text-amber-950 leading-snug">
+                    Na descrição do PIX, escreva exatamente este nome:
+                </p>
+            </div>
+        </div>
+
+        <div
+            x-data="{ copied: false }"
+            class="mt-4 rounded-xl bg-white border border-amber-200 px-4 py-4 shadow-sm"
         >
-            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-            </svg>
-            Ver situação das mensalidades
-        </button>
+            <div class="flex items-center justify-between gap-3">
+                <p class="text-xs font-medium uppercase tracking-wide text-amber-700">Nome do aluno</p>
+                <button
+                    type="button"
+                    @click="navigator.clipboard.writeText(@js($aluno->nome)); copied = true; setTimeout(() => copied = false, 2000)"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 text-amber-950 text-sm font-bold hover:bg-amber-400 transition"
+                >
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                    </svg>
+                    <span x-show="!copied">Copiar nome</span>
+                    <span x-show="copied" x-cloak>Copiado!</span>
+                </button>
+            </div>
+            <p class="mt-2 text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight break-words">
+                {{ $aluno->nome }}
+            </p>
+        </div>
+
+        @if ($config->texto_instrucao_pix)
+            <p class="mt-4 text-sm sm:text-base font-medium text-amber-950 leading-relaxed">
+                {{ $config->texto_instrucao_pix }}
+            </p>
+        @endif
     </div>
 
     <div class="bg-white rounded-xl border border-brand-100 p-5 shadow-sm space-y-4">
@@ -70,14 +106,6 @@
             <p class="font-medium text-gray-900">{{ $aluno->instituicao->nome_pix }}</p>
         </div>
 
-        <div class="rounded-lg bg-amber-50 border border-amber-200 p-4">
-            <p class="text-sm text-amber-900 font-medium">Na descrição do PIX, escreva:</p>
-            <p class="text-sm text-amber-800 mt-1 font-semibold">"{{ $aluno->nome }}"</p>
-            @if ($config->texto_instrucao_pix)
-                <p class="text-xs text-amber-700 mt-2">{{ $config->texto_instrucao_pix }}</p>
-            @endif
-        </div>
-
         @if ($config->aviso_legal)
             <p class="text-xs text-gray-500">{{ $config->aviso_legal }}</p>
         @endif
@@ -94,44 +122,4 @@
             Sem comprovante, o pagamento não tem validade para o colégio.
         </p>
     </div>
-
-    @if ($modalMensalidadesAberto)
-        <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50" wire:click.self="fecharMensalidades">
-            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
-                <div class="flex items-start justify-between gap-4 mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">Mensalidades {{ $aluno->ano_letivo }}</h3>
-                        <p class="text-sm text-gray-600 mt-1">{{ $aluno->nome }}</p>
-                    </div>
-                    <button
-                        type="button"
-                        wire:click="fecharMensalidades"
-                        class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                        title="Fechar"
-                    >
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <x-aluno.progresso-mensalidades
-                    :mensalidades="$aluno->mensalidadesDoAno()"
-                    :compact="false"
-                />
-
-                <p class="text-xs text-gray-500 mt-4 text-center">
-                    As doações ajudam o estudante ao longo do ano — qualquer valor é bem-vindo.
-                </p>
-
-                <button
-                    type="button"
-                    wire:click="fecharMensalidades"
-                    class="mt-4 w-full py-2.5 rounded-lg bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700"
-                >
-                    Fechar
-                </button>
-            </div>
-        </div>
-    @endif
 </div>
